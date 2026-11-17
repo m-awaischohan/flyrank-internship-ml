@@ -1,0 +1,339 @@
+{
+  "environment": {
+    "scikit_learn": "1.9.1",
+    "pandas": "3.0.5",
+    "numpy": "2.5.3",
+    "seed": 42
+  },
+  "data": {
+    "rows": 30000,
+    "columns": 44,
+    "clients_total": 32,
+    "no_position_rows": 1205,
+    "eligible_pages": 12770,
+    "labelled_pages": 11111,
+    "clients_labelled": 29,
+    "dropped_share": 0.13,
+    "median_earlier_impressions_kept": 1182.0,
+    "median_earlier_impressions_dropped": 165.0,
+    "base_rate": 0.41,
+    "largest_client_share": 0.389,
+    "base_rate_without_largest_client": 0.363,
+    "later_band_norm_pct": {
+      "1-3": 0.571,
+      "4-6": 0.415,
+      "7-10": 0.292,
+      "11-15": 0.412,
+      "16-20": 0.425
+    }
+  },
+  "leakage": {
+    "final features (reference)": {
+      "auc": 0.789,
+      "p50": 1.0,
+      "p100": 0.93
+    },
+    "drop avg_position": {
+      "auc": 0.784,
+      "p50": 0.98,
+      "p100": 0.93
+    },
+    "drop band-norm features (ratio, gap, miss)": {
+      "auc": 0.786,
+      "p50": 1.0,
+      "p100": 0.93
+    },
+    "add days_since_last_update": {
+      "auc": 0.784,
+      "p50": 0.98,
+      "p100": 0.93
+    },
+    "add ctr_last (deliberate leak)": {
+      "auc": 1.0,
+      "p50": 1.0,
+      "p100": 1.0
+    },
+    "shuffled labels": {
+      "auc": 0.495,
+      "p50": 0.32,
+      "p100": 0.4
+    }
+  },
+  "main": {
+    "random picking (average of 200)": {
+      "p20": 0.411,
+      "p50": 0.41,
+      "p100": 0.409,
+      "auc": 0.5
+    },
+    "biggest pages first": {
+      "p20": 0.45,
+      "p50": 0.44,
+      "p100": 0.29,
+      "auc": 0.378
+    },
+    "week-4 rule": {
+      "p20": 0.8,
+      "p50": 0.76,
+      "p100": 0.75,
+      "auc": 0.551
+    },
+    "logistic regression": {
+      "p20": 0.85,
+      "p50": 0.82,
+      "p100": 0.83,
+      "auc": 0.778
+    },
+    "gradient boosting": {
+      "p20": 1.0,
+      "p50": 1.0,
+      "p100": 0.93,
+      "auc": 0.789
+    },
+    "average of both (the queue)": {
+      "p20": 1.0,
+      "p50": 0.98,
+      "p100": 0.94,
+      "auc": 0.789
+    }
+  },
+  "designs": {
+    "A. random split, norms from all pages": {
+      "rule": {
+        "p50": 0.82,
+        "p100": 0.81,
+        "auc": 0.546
+      },
+      "logreg": {
+        "p50": 0.82,
+        "p100": 0.84,
+        "auc": 0.791
+      },
+      "gboost": {
+        "p50": 1.0,
+        "p100": 0.98,
+        "auc": 0.799
+      }
+    },
+    "B. random split, norms from training only": {
+      "rule": {
+        "p50": 0.8,
+        "p100": 0.8,
+        "auc": 0.546
+      },
+      "logreg": {
+        "p50": 0.82,
+        "p100": 0.84,
+        "auc": 0.791
+      },
+      "gboost": {
+        "p50": 0.98,
+        "p100": 0.98,
+        "auc": 0.799
+      }
+    },
+    "C. grouped by client, norms from training only": {
+      "rule": {
+        "p50": 0.76,
+        "p100": 0.75,
+        "auc": 0.551
+      },
+      "logreg": {
+        "p50": 0.82,
+        "p100": 0.83,
+        "auc": 0.778
+      },
+      "gboost": {
+        "p50": 1.0,
+        "p100": 0.93,
+        "auc": 0.789
+      }
+    }
+  },
+  "per_fold": [
+    {
+      "fold": 0,
+      "clients": 1,
+      "pages": 4325,
+      "base_rate": 0.483,
+      "queue_p50": 0.96,
+      "rule_p50": 0.72,
+      "queue_auc": 0.793
+    },
+    {
+      "fold": 1,
+      "clients": 7,
+      "pages": 1697,
+      "base_rate": 0.408,
+      "queue_p50": 0.84,
+      "rule_p50": 0.76,
+      "queue_auc": 0.78
+    },
+    {
+      "fold": 2,
+      "clients": 6,
+      "pages": 1696,
+      "base_rate": 0.272,
+      "queue_p50": 0.76,
+      "rule_p50": 0.62,
+      "queue_auc": 0.785
+    },
+    {
+      "fold": 3,
+      "clients": 8,
+      "pages": 1697,
+      "base_rate": 0.415,
+      "queue_p50": 0.78,
+      "rule_p50": 0.72,
+      "queue_auc": 0.76
+    },
+    {
+      "fold": 4,
+      "clients": 7,
+      "pages": 1696,
+      "base_rate": 0.355,
+      "queue_p50": 0.78,
+      "rule_p50": 0.56,
+      "queue_auc": 0.809
+    }
+  ],
+  "errors": {
+    "top100_correct": 94,
+    "top100_wrong": 6,
+    "top100_from_largest_client": 62,
+    "wrong_with_recent_edit": 6,
+    "correct_with_recent_edit": 57,
+    "share_all_labelled_recent_edit": 0.632,
+    "low_later_pages_below_rank_3000": 2816,
+    "low_later_pages_total": 4550,
+    "wrong_picks_with_two_or_fewer_clicks": 5,
+    "largest_misses_rule_ranks": [
+      2,
+      3651,
+      15
+    ],
+    "largest_misses_earlier_impressions": [
+      161284,
+      104722,
+      80048
+    ]
+  },
+  "limits": {
+    "largest_client_share": 0.389,
+    "dropped_share": 0.13,
+    "per_fold_p50_min": 0.76,
+    "per_fold_p50_max": 0.96
+  },
+  "archetypes": {
+    "Big page, far below band": {
+      "pages": 296,
+      "labelled": 296,
+      "low_later_rate": 0.743,
+      "in_top100": 69,
+      "first_action": "Check the live snippet against the main query's intent and the pages above it. Log findings before any edit."
+    },
+    "Page one, far below band": {
+      "pages": 670,
+      "labelled": 669,
+      "low_later_rate": 0.58,
+      "in_top100": 5,
+      "first_action": "Same snippet check; also look for ads, answer boxes or video that explain a low CTR at this position."
+    },
+    "Striking distance, low CTR": {
+      "pages": 223,
+      "labelled": 222,
+      "low_later_rate": 0.653,
+      "in_top100": 14,
+      "first_action": "Mostly a position gap: review relevance and internal links before rewriting the snippet."
+    },
+    "Thin evidence": {
+      "pages": 5263,
+      "labelled": 3995,
+      "low_later_rate": 0.621,
+      "in_top100": 12,
+      "first_action": "Low stakes (under 10 clicks expected). Review in bulk once a month."
+    },
+    "Moderate gap on a big page": {
+      "pages": 186,
+      "labelled": 186,
+      "low_later_rate": 0.183,
+      "in_top100": 0,
+      "first_action": "Watch list only. Most of these do not stay low; re-check after 30 days."
+    },
+    "No flag": {
+      "pages": 6132,
+      "labelled": 5743,
+      "low_later_rate": 0.223,
+      "in_top100": 0,
+      "first_action": "No action from this playbook."
+    }
+  },
+  "decay": {
+    "flagged_labelled_pages": 1187,
+    "still_low_later": 0.634,
+    "back_at_or_above_norm": 0.076,
+    "in_between": 0.29,
+    "still_low_with_recent_edit": 0.596,
+    "still_low_without_recent_edit": 0.69,
+    "pages_with_recent_edit": 703,
+    "pages_without_recent_edit": 484
+  },
+  "cost": {
+    "assumption": "15 minutes per page review, 50 pages per week = 12.5 reviewer hours (assumption, not measured)",
+    "batches": {
+      "random 50 pages (average of 200)": {
+        "precision50": 0.42,
+        "found": 20.76,
+        "hours_per_page_found": 0.62,
+        "clicks_at_stake": 275.91,
+        "clicks_at_stake_still_low": 163.09,
+        "clients": 11.71
+      },
+      "50 biggest pages": {
+        "precision50": 0.44,
+        "found": 22.0,
+        "hours_per_page_found": 0.57,
+        "clicks_at_stake": 7806,
+        "clicks_at_stake_still_low": 5709,
+        "clients": 8
+      },
+      "week-4 rule top 50": {
+        "precision50": 0.76,
+        "found": 38.0,
+        "hours_per_page_found": 0.33,
+        "clicks_at_stake": 10271,
+        "clicks_at_stake_still_low": 8186,
+        "clients": 6
+      },
+      "this queue, top 50": {
+        "precision50": 0.98,
+        "found": 49.0,
+        "hours_per_page_found": 0.26,
+        "clicks_at_stake": 6211,
+        "clicks_at_stake_still_low": 6175,
+        "clients": 7
+      },
+      "this queue, capped batch (max 15 per client)": {
+        "precision50": 0.92,
+        "found": 46.0,
+        "hours_per_page_found": 0.27,
+        "clicks_at_stake": 6061,
+        "clicks_at_stake_still_low": 5875,
+        "clients": 11
+      }
+    },
+    "plain_pages_from_largest_client": 31,
+    "capped_pages_from_largest_client": 15
+  },
+  "monitoring": {
+    "precision_floor": 0.76,
+    "min_lift_over_base_rate": 0.15,
+    "base_rate_range": [
+      0.222,
+      0.533
+    ],
+    "max_band_mix_shift_tvd": 0.1,
+    "retrain": "re-fit and re-validate grouped by client when new outcomes exist and a tripwire fires, or quarterly; ship the rule if the model does not beat it on held-out clients"
+  },
+  "claim_language": "observed / measured / directional / decision-support; no causal claim"
+}

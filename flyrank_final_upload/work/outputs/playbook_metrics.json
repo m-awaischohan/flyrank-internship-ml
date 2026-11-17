@@ -1,0 +1,106 @@
+{
+  "snapshot": "starter file content_refresh_anonymized.csv, one snapshot, two 30-day windows",
+  "eligible_pages": 12770,
+  "labelled_pages": 11111,
+  "clients": 29,
+  "base_rate_low_later": 0.41,
+  "validation": "5-fold GroupKFold by client; band norms from training clients only",
+  "precision": {
+    "random pages": {
+      "p@20": 0.401,
+      "p@50": 0.404,
+      "p@100": 0.408,
+      "AUC": 0.5
+    },
+    "biggest pages first": {
+      "p@20": 0.45,
+      "p@50": 0.44,
+      "p@100": 0.29,
+      "AUC": 0.378
+    },
+    "week-4 rule (missing clicks)": {
+      "p@20": 0.8,
+      "p@50": 0.76,
+      "p@100": 0.75,
+      "AUC": 0.551
+    },
+    "this queue (LR + boosting average)": {
+      "p@20": 1.0,
+      "p@50": 0.98,
+      "p@100": 0.94,
+      "AUC": 0.789
+    }
+  },
+  "precision_at_50_per_fold": [
+    0.96,
+    0.84,
+    0.76,
+    0.78,
+    0.78
+  ],
+  "batch": {
+    "size": 50,
+    "client_cap": 15,
+    "plain_p50": 0.98,
+    "capped_p50": 0.92
+  },
+  "archetypes": {
+    "A. Big page, far below band": {
+      "pages": 296,
+      "labelled": 296,
+      "observed_low_later_rate": 0.743,
+      "top100": 69
+    },
+    "B. Page one, far below band": {
+      "pages": 670,
+      "labelled": 669,
+      "observed_low_later_rate": 0.58,
+      "top100": 5
+    },
+    "C. Moderate gap on a big page": {
+      "pages": 186,
+      "labelled": 186,
+      "observed_low_later_rate": 0.183,
+      "top100": 0
+    },
+    "D. Striking distance, low CTR": {
+      "pages": 223,
+      "labelled": 222,
+      "observed_low_later_rate": 0.653,
+      "top100": 14
+    },
+    "E. Thin evidence": {
+      "pages": 5263,
+      "labelled": 3995,
+      "observed_low_later_rate": 0.621,
+      "top100": 12
+    },
+    "F. No flag": {
+      "pages": 6132,
+      "labelled": 5743,
+      "observed_low_later_rate": 0.223,
+      "top100": 0
+    }
+  },
+  "decay": {
+    "flagged_labelled_pages": 1187,
+    "still_low_later": 0.634,
+    "back_at_or_above_band_norm": 0.076
+  },
+  "cost_assumptions": {
+    "minutes_per_page": 15,
+    "pages_per_week": 50,
+    "note": "assumption, not measured"
+  },
+  "monitoring_thresholds": {
+    "p50_floor": 0.76,
+    "min_lift_over_base": 0.15,
+    "base_rate_range": [
+      0.222,
+      0.533
+    ],
+    "no_position_share": 0.0402,
+    "max_band_tvd": 0.1
+  },
+  "claim_language": "observed / measured / directional / decision-support; no causal claim"
+}
